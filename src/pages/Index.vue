@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="flex flex-center bg-blue-grey-10">
     <characters-list></characters-list>
   </q-page>
 </template>

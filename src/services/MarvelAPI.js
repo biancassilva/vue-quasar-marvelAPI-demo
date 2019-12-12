@@ -12,19 +12,19 @@ export default {
       }
     })
   },
-  searchCharacter: (name, callback) => {
-    const URL_SEARCH_CHARACTER = `${URL_BASE_MARVEL}characters?apikey=${API_KEY}&name=${name}`
-    axios.get(URL_SEARCH_CHARACTER).then(character => {
+  getCharacterByID: (characterID, callback) => {
+    const URL_CHARACTER_BY_ID = `${URL_BASE_MARVEL}characters/${characterID}?apikey=${API_KEY}`
+    axios.get(URL_CHARACTER_BY_ID).then(character => {
       if (callback) {
         callback(character)
       }
     })
   },
-  getAllComics: (limit, callback) => {
-    const URL_COMICS = `${URL_BASE_MARVEL}comics?apikey=${API_KEY}&limit=${limit}`
-    axios.get(URL_COMICS).then(comics => {
+  searchCharacter: (name, callback) => {
+    const URL_SEARCH_CHARACTER = `${URL_BASE_MARVEL}characters?apikey=${API_KEY}&name=${name}`
+    axios.get(URL_SEARCH_CHARACTER).then(character => {
       if (callback) {
-        callback(comics)
+        callback(character)
       }
     })
   }

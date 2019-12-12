@@ -1,14 +1,28 @@
 <template>
-  <div class="row">
-    <div class="col-12 q-pa-sm">
-    <q-input type="text" filled v-model="characterName" label="Digite o nome do personagem"></q-input>
-    <q-btn @click="searchCharacter()" label="Buscar" color="primary"></q-btn>
+  <div class="row justify-center">
+    <div class="col-12 q-pa-lg">
+      <q-input
+        dark
+        color="white"
+        filled
+        v-model="characterName"
+        label="Digite o nome do personagem"
+      >
+        <template v-slot:after>
+          <q-btn @click="searchCharacter()" unelevated="" icon="search" label="Buscar" color="red"></q-btn>
+        </template>
+      </q-input>
     </div>
-    <q-card v-for="(character, idx) in characters" :key="idx" class="col-3">
-      <q-card-section>
-        <q-img :src="character.thumbnail.path + '/portrait_xlarge.' + character.thumbnail.extension"></q-img>
-      </q-card-section>
-      <q-card-section>{{character.name}}</q-card-section>
+    <q-card v-for="(character, idx) in characters" :key="idx" class="col-3 q-ma-md">
+      <q-img
+        :src="character.thumbnail.path + '/portrait_incredible.' + character.thumbnail.extension"
+      ></q-img>
+      <q-card-section class="text-h6">{{character.name}}</q-card-section>
+      <q-separator inset></q-separator>
+      <q-card-section>{{character.description ? character.description : 'Sem descrição'}}</q-card-section>
+      <q-card-actions align="right">
+        <q-btn color="blue-grey-9" no-caps label="Detalhes"></q-btn>
+      </q-card-actions>
     </q-card>
   </div>
 </template>
