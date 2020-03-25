@@ -15,7 +15,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered content-class="bg-blue-grey-10">
+    <q-drawer v-model="leftDrawerOpen" :breakpoint="1800" show-if-above bordered content-class="bg-blue-grey-10">
     </q-drawer>
 
     <q-page-container>

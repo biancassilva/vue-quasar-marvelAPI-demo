@@ -1,31 +1,34 @@
 import axios from 'axios'
 
-const URL_BASE_MARVEL = 'https://gateway.marvel.com:443/v1/public/'
-const API_KEY = 'YOUR-API-KEY'
+const API_KEY = 'bbe4460b855f6b8dbba2e8febfc56fea'
 
-export default {
-  getAllCharacteres: (limit, callback) => {
-    const URL_CHARACTERS = `${URL_BASE_MARVEL}characters?apikey=${API_KEY}&limit=${limit}`
-    axios.get(URL_CHARACTERS).then(characters => {
-      if (callback) {
-        callback(characters)
-      }
-    })
-  },
-  getCharacterByID: (characterID, callback) => {
-    const URL_CHARACTER_BY_ID = `${URL_BASE_MARVEL}characters/${characterID}?apikey=${API_KEY}`
-    axios.get(URL_CHARACTER_BY_ID).then(character => {
-      if (callback) {
-        callback(character)
-      }
-    })
-  },
-  searchCharacter: (name, callback) => {
-    const URL_SEARCH_CHARACTER = `${URL_BASE_MARVEL}characters?apikey=${API_KEY}&name=${name}`
-    axios.get(URL_SEARCH_CHARACTER).then(character => {
-      if (callback) {
-        callback(character)
-      }
-    })
+export default class MarvelAPI {
+  constructor () {
+    this.api = 'https://gateway.marvel.com:443/v1/public/'
+    this.http = axios
+  }
+  list = async (limit) => {
+    try {
+      const response = await this.http.get(`${this.api}characters?apikey=${API_KEY}&limit=${limit}`)
+      return response.data
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+  show = async (characterID) => {
+    try {
+      const response = await this.http.get(`${this.api}characters/${characterID}?apikey=${API_KEY}`)
+      return response.data
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+  search = async (name) => {
+    try {
+      const response = await this.http.get(`${this.api}characters?apikey=${API_KEY}&name=${name}`)
+      return response.data
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 }
