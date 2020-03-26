@@ -1,6 +1,8 @@
 import axios from 'axios'
 
-const API_KEY = 'bbe4460b855f6b8dbba2e8febfc56fea'
+const API_KEY = 'PUBLIC_API_HERE'
+const TS = 'timestamp'
+const HASH = 'gerar um md5(Timestamp+privateKey+publicKey)'
 
 export default class MarvelAPI {
   constructor () {
@@ -9,7 +11,7 @@ export default class MarvelAPI {
   }
   list = async (limit) => {
     try {
-      const response = await this.http.get(`${this.api}characters?apikey=${API_KEY}&limit=${limit}`)
+      const response = await this.http.get(`${this.api}characters?ts=${TS}&apikey=${API_KEY}&hash=${HASH}&limit=${limit}`)
       return response.data
     } catch (error) {
       throw new Error(error)
@@ -17,7 +19,7 @@ export default class MarvelAPI {
   }
   show = async (characterID) => {
     try {
-      const response = await this.http.get(`${this.api}characters/${characterID}?apikey=${API_KEY}`)
+      const response = await this.http.get(`${this.api}characters/${characterID}?apikey=${API_KEY}&ts=${TS}&hash=${HASH}`)
       return response.data
     } catch (error) {
       throw new Error(error)
@@ -25,10 +27,11 @@ export default class MarvelAPI {
   }
   search = async (name) => {
     try {
-      const response = await this.http.get(`${this.api}characters?apikey=${API_KEY}&name=${name}`)
+      const response = await this.http.get(`${this.api}characters?ts=${TS}&apikey=${API_KEY}&hash=${HASH}&name=${name}`)
       return response.data
     } catch (error) {
       throw new Error(error)
     }
   }
 }
+
