@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row justify-center q-mb-md q-pt-md">
-      <div class="col-6">
+      <div class="col-lg-6 col-md-6 col-sm-8 xol-xs-12">
         <q-input
           class="full-width"
           dark
@@ -12,25 +12,39 @@
           @keyup.enter="searchCharacter"
         >
           <template v-slot:after>
-            <q-btn @click="searchCharacter()" size="lg" unelevated icon="search" color="red"></q-btn>
+            <q-btn
+              @click="searchCharacter()"
+              size="lg"
+              unelevated
+              icon="search"
+              color="red"
+              :loading="isLoadingSearch"
+            ></q-btn>
           </template>
         </q-input>
       </div>
     </div>
     <q-separator inset></q-separator>
-    <div class="row justify-center q-mt-md" v-if="!!characters.length">
-      <q-card v-for="(character, idx) in characters" :key="idx" class="col-3 q-ma-md">
+    <div class="row justify-center q-mt-md" v-if="characters.length && !isLoading">
+      <q-card
+        v-for="(character, idx) in characters"
+        :key="idx"
+        class="col-xl-2 col-lg-2 col-md-2 col-sm-3 col-xs-12 q-ma-md bg-blue-grey-8 text-white"
+        @click="openDetails(character.id)"
+      >
         <q-img
-          :src="character.thumbnail.path + '/portrait_incredible.' + character.thumbnail.extension"
+          :src="`${character.thumbnail.path}/portrait_incredible.${character.thumbnail.extension}`"
         ></q-img>
         <q-card-section class="text-h6">{{character.name}}</q-card-section>
-        <q-separator inset></q-separator>
-        <q-card-section>{{character.description ? character.description : 'Sem descrição'}}</q-card-section>
-        <q-card-actions align="right">
-          <q-btn color="blue-grey-9" no-caps label="Detalhes" @click="openDetails(character.id)"></q-btn>
-        </q-card-actions>
       </q-card>
     </div>
+    <div
+      v-else-if="!characters.length && !isLoading"
+      class="text-center text-grey-5 q-pa-md"
+    >Nenhum resultado encontrado</div>
+    <q-inner-loading :showing="isLoading">
+      <q-spinner size="50px" color="blue-grey-9" />
+    </q-inner-loading>
   </div>
 </template>
 <script>
@@ -40,8 +54,11 @@ export default {
   name: 'CharactersList',
   data () {
     return {
+      MarvelAPI: new MarvelAPI(),
       characterName: '',
-      characters: []
+      characters: [],
+      isLoading: false,
+      isLoadingSearch: false
     }
   },
   created () {
@@ -49,14 +66,18 @@ export default {
   },
   methods: {
     getAllCharacters () {
-      MarvelAPI.getAllCharacteres(100, characters => {
-        this.characters = characters.data.data.results
-      })
+      this.isLoading = true
+      this.MarvelAPI.list(100)
+        .then(characters => { this.characters = characters.data.results })
+        .catch(error => { this.$q.notify(error) })
+        .finally(() => { this.isLoading = false })
     },
     searchCharacter () {
-      MarvelAPI.searchCharacter(this.characterName, character => {
-        this.characters = character.data.data.results
-      })
+      this.isLoadingSearch = true
+      this.MarvelAPI.search(this.characterName)
+        .then(character => { this.characters = character.data.results })
+        .catch(error => { this.$q.notify(error.message) })
+        .finally(() => { this.isLoadingSearch = false })
     },
     openDetails (id) {
       this.$emit('openDetails', id)

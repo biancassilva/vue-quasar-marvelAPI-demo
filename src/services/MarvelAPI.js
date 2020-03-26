@@ -1,34 +1,37 @@
 import axios from 'axios'
 
-const URL_BASE_MARVEL = 'https://gateway.marvel.com/v1/public/'
-const API_KEY = 'sua chave publica aqui'
+const API_KEY = 'PUBLIC_API_HERE'
 const TS = 'timestamp'
 const HASH = 'gerar um md5(Timestamp+privateKey+publicKey)'
 
-export default {
-  getAllCharacteres: (limit, callback) => {
-    const URL_CHARACTERS = `${URL_BASE_MARVEL}characters?ts=${TS}&apikey=${API_KEY}&hash=${HASH}&limit=${limit}`
-    axios.get(URL_CHARACTERS).then(characters => {
-      if (callback) {
-        callback(characters)
-      }
-    })
-  },
-  getCharacterByID: (characterID, callback) => {
-    const URL_CHARACTER_BY_ID = `${URL_BASE_MARVEL}characters/${characterID}?apikey=${API_KEY}&ts=${TS}&hash=${HASH}`
-    axios.get(URL_CHARACTER_BY_ID).then(character => {
-      if (callback) {
-        callback(character)
-      }
-    })
-  },
-  searchCharacter: (name, callback) => {
-    const URL_SEARCH_CHARACTER = `${URL_BASE_MARVEL}characters?ts=${TS}&apikey=${API_KEY}&hash=${HASH}&name=${name}`
-    axios.get(URL_SEARCH_CHARACTER).then(character => {
-      if (callback) {
-        callback(character)
-      }
-    })
+export default class MarvelAPI {
+  constructor () {
+    this.api = 'https://gateway.marvel.com:443/v1/public/'
+    this.http = axios
+  }
+  list = async (limit) => {
+    try {
+      const response = await this.http.get(`${this.api}characters?ts=${TS}&apikey=${API_KEY}&hash=${HASH}&limit=${limit}`)
+      return response.data
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+  show = async (characterID) => {
+    try {
+      const response = await this.http.get(`${this.api}characters/${characterID}?apikey=${API_KEY}&ts=${TS}&hash=${HASH}`)
+      return response.data
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+  search = async (name) => {
+    try {
+      const response = await this.http.get(`${this.api}characters?ts=${TS}&apikey=${API_KEY}&hash=${HASH}&name=${name}`)
+      return response.data
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 }
 
